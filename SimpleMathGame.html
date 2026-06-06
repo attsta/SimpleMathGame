@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioco di Matematica</title>
+    <style>
+        
+        /*********************
+        * page common colors *
+        *********************/
+        
+        :root {
+            /* ragazza */
+            --color-girl-good:       #49e776;
+            --color-girl-normal:     #f0f306;
+            --color-girl-bad:        #e74949;
+            --color-girl-text1:      black;
+            --color-girl-text2:      white;
+            --color-girl-bg1:        #ffffff;
+            --color-girl-bg2:        #ffffff;
+            --color-girl-component1: #ebb1f0;
+            --color-girl-component2: #cb86d1;
+            --color-girl-alert:      #e74949;
+            
+            /* ragazzo */
+            --color-boy-good:       #49e776;
+            --color-boy-normal:     #f0f306;
+            --color-boy-bad:        #e74949;
+            --color-boy-text1:      black;
+            --color-boy-text2:      white;
+            --color-boy-bg1:        #f0f8ff;
+            --color-boy-bg2:        #ffffff;
+            --color-boy-component1: #38bdf5;
+            --color-boy-component2: #007bff;
+            --color-boy-alert:      #e74949;
+            
+            /* ginnasta */
+            --color-gym-good:       #49e776;
+            --color-gym-normal:     #f0f306;
+            --color-gym-bad:        #e74949;
+            --color-gym-text1:      #cf23cd;
+            --color-gym-text2:      white;
+            --color-gym-bg1:        #f0f8ff;
+            --color-gym-bg2:        #ffffff;
+            --color-gym-component1: #cf23cd;
+            --color-gym-component2: #a922a7;
+            --color-gym-alert:      #e74949;
+            
+            /* rock */
+            --color-rock-good:       #49e776;
+            --color-rock-normal:     #bbbd23;
+            --color-rock-bad:        #e74949;
+            --color-rock-text1:      black;
+            --color-rock-text2:      white;
+            --color-rock-bg1:        #ad1e81;
+            --color-rock-bg2:        #af9090;
+            --color-rock-component1: #000000;
+            --color-rock-component2: #43dc2d;
+            --color-rock-alert:      #e74949;
+            
+            /* streghetta */
+            --color-witch-good:       #49e776;
+            --color-witch-normal:     #f0f306;
+            --color-witch-bad:        #e74949;
+            --color-witch-text1:      #cf23cd;
+            --color-witch-text2:      white;
+            --color-witch-bg1:        #83d02a;
+            --color-witch-bg2:        #000000;
+            --color-witch-component1: #cf23cd;
+            --color-witch-component2: #a922a7;
+            --color-witch-alert:      #e74949;
+            
+            /* dinosauri */
+            --color-dino-good:       #49e776;
+            --color-dino-normal:     #f0f306;
+            --color-dino-bad:        #e74949;
+            --color-dino-text1:      #50b520;
+            --color-dino-text2:      white;
+            --color-dino-bg1:        #dff412;
+            --color-dino-bg2:        #975a1b;
+            --color-dino-component1: #50b520;
+            --color-dino-component2: #398017;
+            --color-dino-alert:      #e74949;
+            
+            /*************************************
+            * variabili utilizzate nell'app      *
+            * valorizzate con i default --> girl *
+            *************************************/
+            
+            --color-good:       var(--color-girl-good);
+            --color-normal:     var(--color-girl-normal);
+            --color-bad:        var(--color-girl-bad);
+            --color-text1:      var(--color-girl-text1);
+            --color-text2:      var(--color-girl-text2);
+            --color-bg1:        var(--color-girl-bg1);
+            --color-bg2:        var(--color-girl-bg2);
+            --color-component1: var(--color-girl-component1);
+            --color-component2: var(--color-girl-component2);
+            --color-alert:      var(--color-girl-alert);
+        }
+        .color-good {
+            color: var(--color-good);
+        }
+        .color-normal {
+            color: var(--color-normal);
+        }
+        .color-bad {
+            color: var(--color-bad);
+        }
+        .background-good {
+            background-color: var(--color-good);
+        }
+        .background-normal {
+            background-color: var(--color-normal);
+        }
+        .background-bad {
+            background-color: var(--color-bad);
+        }
+        
+        /*************************
+        * page common components *
+        *************************/
+        
+        * {
+            font-family: 'Bubblegum Sans', 'Baloo 2', 'Fredericka the Great', Arial, sans-serif;
+        }
+        body {
+            text-align: center;
+            background-color: var(--color-bg1);
+            color: var(--color-text1);
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            color: var(--color-component1);
+            margin: 0;
+        }
+        .container {
+            border: 6px solid var(--color-component1);
+            border-radius: 10px;
+            padding: 20px;
+            background-color: var(--color-bg2);
+            width: 40%;
+            margin: 10px auto;
+        }
+        @keyframes esplosione {
+            0%   { transform: scale(1);   opacity: 1;   }
+            50%  { transform: scale(1.2); opacity: 0.6; }
+            100% { transform: scale(1);   opacity: 1;   }
+        }
+        .esplosione {
+            animation: esplosione 0.5s ease-out;
+        }
+        button {
+            background-color: var(--color-component1);
+            color: var(--color-text2);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 10px auto;
+            width: 45%;
+        }
+        button:hover {
+            background-color: var(--color-component2);
+        }
+        .select-group {
+            margin: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .select-group label {
+            text-align: left;
+        }
+        select {
+            width: 60%;
+            color: var(--color-text1);
+            background-color: var(--color-bg1);
+            font-size: 16px;
+            border: 2px solid var(--color-component1);
+            border-radius: 5px;
+        }
+        .checkbox-group {
+            text-align: left;
+        }
+        .containerToggle {
+            cursor: pointer;
+        }
+        
+        /*****************************
+        * specific components: users *
+        *****************************/
+        
+        .user-list {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .user-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 5px auto;
+            padding: 10px;
+        }
+        .delete-button {
+            background: none;
+            font-size: 16px;
+            margin: 0px 10px 0px 10px;
+            width: auto;
+            padding: 0px;
+        }
+
+        /****************************
+        * specific components: game *
+        ****************************/
+        
+        .question-container {
+            width: max-content;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px auto;
+            text-align: center;
+        }
+        #question {
+            width: 4em;
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        .answer-container {
+            display: inline-block;
+        }
+        /* input[type="number"] */
+        #answer {
+            width: 3em;
+            text-align: center;
+            font-size: 18px;
+            border: 2px solid var(--color-component1);
+            border-radius: 5px;
+            /*background-color: var(--color-bg1);*/
+            transition: background-color 1s ease, border-color 1s ease;
+        }
+        #result {
+            font-size: 32px;
+            margin: 0;
+            height: 30px; /* Altezza fissa per evitare spostamenti */
+            padding: 0;
+            line-height: 30px; /* Allinea verticalmente il testo */
+        }
+        
+        /*****************************************
+        * specific components: animazione answer *
+        *****************************************/
+        
+        @keyframes shake {
+            0%   { transform: translateX(0);    }
+            25%  { transform: translateX(-5px); }
+            50%  { transform: translateX(5px);  }
+            75%  { transform: translateX(-5px); }
+            100% { transform: translateX(5px);  }
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        /********************************
+        * specific components: keyboard *
+        ********************************/
+        
+        .keyboard {
+            border: 6px solid var(--color-component1);
+            border-radius: 10px;
+            margin: 10px auto;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: min-content;
+        }
+        .key {
+            padding: 10px;
+            width: 2em;
+            height: 2em;
+            margin: 5px;
+            display: flex;
+            justify-content: center;  /* Centra orizzontalmente */
+            align-items: center;      /* Centra verticalmente */
+            text-align: center;
+        }
+        .key:active {
+            transform: scale(0.95);
+            background-color: var(--color-component2);
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+            transition: transform 0.05s, background-color 0.1s;
+        }
+        
+        /*************************************
+        * specific components:  progress bar *
+        *************************************/
+
+        #timerContainer {
+            height: 42px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #progressBarContainer {
+            width: 45%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px auto;
+        }
+        #progressBar {
+            width: 0%;
+            height: 100%;
+            background-color: var(--color-normal);
+            transition: width 0.1s linear;
+        }
+        
+        /*****************************
+        * specific components: stats *
+        *****************************/
+        
+        #stats {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding-top: 10px;
+            width: 50%;
+            margin: 10px auto;
+        }
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            text-align: left;
+        }
+        .stat-number {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: right;
+            padding-left: 10px;
+        }
+        .percent-container span {
+            font-size: 36px;
+            font-weight: bold;
+        }
+        
+        /******************************
+        * specific components: config *
+        ******************************/
+        
+        #resetStatsButton {
+            background-color: var(--color-alert);
+        }
+        
+        /*******************************
+        * specific components: rewards *
+        *******************************/
+        
+        #allRewards {
+            display: grid;
+            grid-template-columns: repeat(10, 40px); /* 10 colonne fisse da 40px */
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .reward {
+            width: 40px;
+            height: 40px;
+            border: 1px dashed var(--color-component1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0px;
+            align-items: center;
+        }
+        .zoomable {
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 1;
+        }
+        .zoomed {
+            transform: scale(4); /* ingrandimento */
+            z-index: 10;
+            background-color: var(--color-bg1);
+        }
+        .rewardLabel {
+            display: none;
+        }
+        .zoomed .rewardLabel {
+            display: block;
+            font-size: 3px;
+        }
+        
+        /*************************
+        * responsive definitions *
+        *************************/
+        
+        /* media queries for medium devices (landscape tablets, 768px and down) */
+        @media only screen and (max-width: 768px) {
+            .container {
+                width: auto;
+                margin: 25px;
+            }
+            button {
+                width: 50%;
+            }
+            #stats {
+                width: 50%;
+            }
+        }
+        
+        /* media queries for extra small devices (phones, 600px and down) */
+        @media only screen and (max-width: 600px) {
+            button {
+                width: 90%;
+            }
+            #stats {
+                width: 100%;
+            }
+            #allRewards {
+                display: grid;
+                grid-template-columns: repeat(5, 40px);
+                gap: 10px;
+                justify-content: center;
+                margin-top: 20px;
+            }
+        }
+        
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Baloo+2&family=Fredericka+the+Great&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+    <!-- Contenitore per la gestione degli utenti -->
+    <div class="container" id="usersContainer">
+        <h1>ciao, seleziona un utente...</h1>
+        <div id="userList" class="user-list"></div>
+        <!-- Pulsante per aggiungere un nuovo utente -->
+        <button id="addUserButton">aggiungi un nuovo utente</button>
+    </div>
+    
+    <!-- Contenitore per la configurazione del gioco -->
+    <div class="container" id="configContainer">
+        <h1 class="containerToggle" id="configToggle">scegli...</h1>
+        
+        <div id="allConfigs">
+            <div class="selectConfigContainer">
+                <!-- Tipo di operazione -->
+                <div class="select-group">
+                    <label for="operation">scegli l'operazione:</label>
+                    <select id="operation" class="select-control">
+                        <option value="addition">addizione</option>
+                        <option value="subtraction">sottrazione</option>
+                        <option value="multiplication">moltiplicazione</option>
+                        <option value="division">divisione</option>
+                    </select>
+                </div>
+                
+                <!-- Difficoltà -->
+                <div class="select-group">
+                    <label for="difficulty">scegli la difficoltà:</label>
+                    <select id="difficulty" class="select-control">
+                        <option value="easy">facile</option>
+                        <option value="medium">media</option>
+                        <option value="hard">difficile</option>
+                    </select>
+                </div>
+                
+                <!-- tema -->
+                <div class="select-group">
+                    <label for="theme">scegli i colori:</label>
+                    <select id="theme" class="select-control">
+                        <option value="girl">principessa delle favole</option>
+                        <option value="boy">principe azzurro</option>
+                        <option value="gym">ginnasta</option>
+                        <option value="rock">rockstar</option>
+                        <option value="witch">streghetta</option>
+                        <option value="dino">dinosauri</option>
+                    </select>
+                </div>
+                
+            </div>
+            
+            <!-- Timer -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="activateTimer" class="form-control" />
+                <label for="activateTimer">sfida a tempo (1 minuto)</label>
+            </div>
+            
+            <!-- Stats -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="activateStats" class="form-control" />
+                <label for="activateStats">mostra i punteggi</label>
+            </div>
+            
+            <!-- Sounds -->
+            <div class="checkbox-group">
+                <input type="checkbox" id="activateSounds" class="form-control" />
+                <label for="activateSounds">attiva i suoni</label>
+            </div>
+            
+            <!-- tastiera personalizzata -->
+            <div class="checkbox-group" id="keyboardOptionContainer">
+                <input type="checkbox" id="activateKeyboard" class="form-control" />
+                <label for="activateKeyboard">mostra la tastiera</label>
+            </div>
+            
+            <!-- Azzeramento punteggi -->
+            <button type="button" id="resetStatsButton" class="button">azzera il punteggio</button>
+        </div>
+    </div>
+    
+    <!-- Contenitore per il gioco -->
+    <div class="container" id="gameContainer">
+        <h1 id="gameTitle">quanto fa?</h1>
+        <div class="question-container">
+            <span id="question"></span>
+            <div class="answer-container">
+                <input type="number" id="answer" placeholder="?" min="0" pattern="[0-9]*" />
+            </div>
+        </div>
+        
+        <div id="result"></div>
+        
+        <div id="timerContainer">
+            <button id="timerButton">fai partire il tempo!</button>
+            
+            <div id="progressBarContainer">
+                <div id="progressBar"></div>
+            </div>
+        </div>
+        
+        <div id="customKeyboard" class="keyboard">
+            <button class="key">1</button>
+            <button class="key">2</button>
+            <button class="key">3</button>
+            <button class="key">4</button>
+            <button class="key">5</button>
+            <button class="key">6</button>
+            <button class="key">7</button>
+            <button class="key">8</button>
+            <button class="key">9</button>
+            <button class="key" id="enterKey">▶</button>
+            <button class="key">0</button>
+            <button class="key" id="deleteKey">⌫</button>
+        </div>
+        
+        <div id="stats">
+            <div class="stats-container">
+                <div class="stat">
+                    <span>Risposte corrette:</span>
+                    <span class="stat-number color-good" id="numCorrect">0</span>
+                </div>
+                <div class="stat">
+                    <span>Risposte sbagliate:</span>
+                    <span class="stat-number color-bad" id="numIncorrect">0</span>
+                </div>
+                <div class="stat" id="recordContainer">
+                    <span>Record:</span>
+                    <span class="stat-number color-normal" id="record">0</span>
+                </div>
+            </div>
+            <div class="percent-container">
+                <span id="correctPercentage">0%</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contenitore per le ricompense -->
+    <div class="container" id="rewardsContainer">
+        <h1 class="containerToggle" id="rewardsToggle">premi!</h1>
+        
+        <div id="allRewards">
+        </div>
+    </div>
+    
+    <script>
+        // Costanti per gestire l'applicazione
+        const POSITIVE_RESPONSES = ['esatto!', 'ottimo!', 'perfetto!', 'eccellente!', 'grande!', 'super!', 'bene!', 'molto bene!', 'splendido!', 'fantastico!', 'fantastico lavoro!'];
+        const NEGATIVE_RESPONSES = ['…non proprio…', '…quasi…', '…c\'eri quasi…', '…insomma…'];
+        const MAX_RESPONSE_VALUE = 100;
+        
+        // Stato dell'applicazione
+        let users = JSON.parse(localStorage.getItem(getUsersKey())) || [];
+        let currentUser = '';  // Variabile globale per conservare il nome utente selezionato
+        let deviceType = '';
+        let operation = '';
+        let difficulty = '';
+        let timer = false;
+        let isTimerStarted = false;
+        let isCustomKeyboard = false;
+        let isCheckingAnswer = false;
+        
+        
+        function renderTheme() {
+            let theme = document.getElementById('theme').value;
+            if (theme === '')
+                return;
+            document.documentElement.style.setProperty('--color-good',       'var(--color-'+theme+'-good)');
+            document.documentElement.style.setProperty('--color-normal',     'var(--color-'+theme+'-normal)');
+            document.documentElement.style.setProperty('--color-bad',        'var(--color-'+theme+'-bad)');
+            document.documentElement.style.setProperty('--color-text1',      'var(--color-'+theme+'-text1)');
+            document.documentElement.style.setProperty('--color-text2',      'var(--color-'+theme+'-text2)');
+            document.documentElement.style.setProperty('--color-bg1',        'var(--color-'+theme+'-bg1)');
+            document.documentElement.style.setProperty('--color-bg2',        'var(--color-'+theme+'-bg2)');
+            document.documentElement.style.setProperty('--color-component1', 'var(--color-'+theme+'-component1)');
+            document.documentElement.style.setProperty('--color-component2', 'var(--color-'+theme+'-component2)');
+            document.documentElement.style.setProperty('--color-alert',      'var(--color-'+theme+'-alert)');
+            
+            saveConfig();
+        }
+        
+        function checkConfig() {
+            operation = document.getElementById('operation').value;
+            difficulty = document.getElementById('difficulty').value;
+            
+            // verifica se è cambiato lo stato dell'opzione timer
+            if (timer !== document.getElementById('activateTimer').checked) {
+                timer = document.getElementById('activateTimer').checked;
+                visibilityToggle('timerContainer', true);
+                visibilityToggle('recordContainer', false);
+                if (isTimerStarted)
+                    resetProgressBar();
+            }
+            
+            saveConfig();
+            
+            // aggiorna la maschera
+            generateQuestion();
+            displayStats(null);
+            displayRewards();
+            
+            // disabilitato solo in caso di opzione timer
+            disableAnswerField(timer);
+        }
+        
+        function visibilityToggle(id, remove) {
+            const target = document.getElementById(id);
+            if (target === null)
+                return;
+            if (remove) {
+                if (getComputedStyle(target).display === 'none') {
+                    if (target.dataset.originalDisplay)
+                        target.style.display = target.dataset.originalDisplay;
+                    else
+                        target.style.display = 'block';
+                } else {
+                    target.dataset.originalDisplay = getComputedStyle(target).display;
+                    target.style.display = 'none';
+                }
+            } else {
+                if (getComputedStyle(target).visibility === 'hidden') {
+                    if (target.dataset.originalVisibility)
+                        target.style.visibility = target.dataset.originalVisibility;
+                    else
+                        target.style.visibility = 'visible';
+                } else {
+                    target.dataset.originalVisibility = getComputedStyle(target).visibility;
+                    target.style.visibility = 'hidden';
+                }
+            }
+        }
+        
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function Question(operation, difficulty) {
+            let minOp1 = minOp2 = null;
+            let maxOp1 = maxOp2 = null;
+            let op1 = op2 = null;
+            let operator = null;
+            let result = null;
+            let reminder = null;
+            let tag = normalizedTag = null;
+            
+            if (operation === 'addition') {
+                operator = '+';
+                
+                // difficulty
+                // - easy:   [0-10] + [0-10]
+                // - medium: [0-20] + [0-10]
+                // - hard:   [0-20] + [0-20]
+
+                // if difficulty === 'easy'
+                minOp1 = 0;
+                maxOp1 = 10;
+                minOp2 = 0;
+                maxOp2 = 10;
+                if (difficulty === 'medium') {
+                    maxOp1 = 20;
+                } else if (difficulty === 'hard') {
+                    maxOp1 = 20;
+                    maxOp2 = 20;
+                }
+                
+                // operands
+                op1 = getRandomNumber(minOp1, maxOp1);
+                op2 = getRandomNumber(minOp2, maxOp2);
+                result = op1 + op2;
+                normalizedTag = tag = [op1, op2].join(operator);
+            } else if (operation === 'multiplication') {
+                operator = 'x';
+                
+                // difficulty
+                // - easy:   [0-5]  * [0-10]
+                // - medium: [0-10] * [0-10]
+                // - hard:   [6-10] * [6-10]
+                
+                // if difficulty === 'easy'
+                minOp1 = 0;
+                maxOp1 = 5;
+                minOp2 = 0;
+                maxOp2 = 10;
+                if (difficulty === 'medium') {
+                    maxOp1 = 10;
+                } else if (difficulty === 'hard') {
+                    minOp1 = 6;
+                    maxOp1 = 10;
+                    minOp2 = 6;
+                    maxOp2 = 10;
+                }
+                
+                // operands
+                op1 = getRandomNumber(minOp1, maxOp1);
+                op2 = getRandomNumber(minOp2, maxOp2);
+                result = op1 * op2;
+                normalizedTag = tag = [op1, op2].join(operator);
+            } else if (operation === 'subtraction') {
+                operator = '-';
+                
+                // difficulty
+                // - easy:   [0-10] - [0-10]
+                // - medium: [0-20] - [0-10]
+                // - hard:   [0-20] - [0-20]
+                
+                // if difficulty === 'easy'
+                minOp1 = 0;
+                maxOp1 = 10;
+                minOp2 = 0;
+                maxOp2 = 10;
+                if (difficulty === 'medium') {
+                    maxOp1 = 20;
+                } else if (difficulty === 'hard') {
+                    maxOp1 = 20;
+                    maxOp2 = 20;
+                }
+                
+                // operands
+                op1 = getRandomNumber(minOp1, maxOp1);
+                op2 = getRandomNumber(minOp2, Math.min(maxOp2, op1));
+                result = op1 - op2;
+                normalizedTag = tag = [op1, op2].join(operator);
+            } else if (operation === 'division') {
+                operator = ':';
+                
+                // difficulty
+                // - easy:   [0-50]  : [0-5]  w/o reminder
+                // - medium: [0-100] : [0-10] w/o reminder
+                // - hard:   [0-100] : [0-10] w/  reminder
+                
+                // per avere numeri assimilabili alle tabelline
+                // gli operandi sono calcolati come moltiplicazioni:
+                // - il dividendo è dato dal prodotto
+                // - il divisore è dato dal secondo operando
+                // - il risultato è dato dal primo operando
+                // - il resto viene aggiunto all'occorrenza
+                
+                // if difficulty === 'medium' || difficulty === 'hard' 
+                minOp1 = 0;
+                maxOp1 = 10;
+                minOp2 = 1;
+                maxOp2 = 10;
+                reminder = 0;
+                if (difficulty === 'easy') {
+                    maxOp2 = 5;
+                }
+                
+                // operands
+                result = getRandomNumber(minOp1, maxOp1);
+                op2 = getRandomNumber(minOp2, maxOp2);
+                op1 = result * op2;
+                normalizedTag = [op1, op2].join(operator);
+                if (difficulty === 'hard') {
+                    reminder = getRandomNumber(minOp2, Math.min(maxOp2,(op2-1)));
+                    op1 += reminder;
+                }
+                tag = [op1, op2].join(operator);
+            }
+            
+            // return question info
+            this.difficulty = difficulty;
+            this.operation = operation;
+            this.operator = operator;
+            this.operand1 = op1;
+            this.operand2 = op2;
+            this.result = result;
+            this.reminder = reminder;
+            this.tag = tag;
+            this.normalizedTag = normalizedTag;
+        }
+        
+        function generateQuestion() {
+            let question = new Question(operation, difficulty);
+            
+            let questionMessage = '';
+            questionMessage += question.operand1;
+            questionMessage += ' ' + question.operator + ' ';
+            questionMessage += question.operand2;
+            questionMessage += ' = ';
+
+            document.getElementById('question').innerHTML = questionMessage;
+            
+            document.getElementById('result').innerText = '';
+            document.getElementById('result').className = '';
+            
+            document.getElementById('answer').value = '';
+            document.getElementById('answer').className = '';  // Reset del colore di background
+            document.getElementById('answer').style.transition = ''; // Resetta l'animazione del colore
+            document.getElementById('answer').max = MAX_RESPONSE_VALUE;
+            document.getElementById('answer').dataset.operation     = question.operation;
+            document.getElementById('answer').dataset.difficulty    = question.difficulty;
+            document.getElementById('answer').dataset.operator      = question.operator;
+            document.getElementById('answer').dataset.operand1      = question.operand1;
+            document.getElementById('answer').dataset.operand2      = question.operand2;
+            document.getElementById('answer').dataset.result        = question.result;
+            document.getElementById('answer').dataset.reminder      = question.reminder;
+            document.getElementById('answer').dataset.tag           = question.tag;
+            document.getElementById('answer').dataset.normalizedTag = question.normalizedTag;
+            disableAnswerField(false);
+            document.getElementById('answer').focus();
+        }
+        
+        function startTimer() {
+            let duration = 60000; // millisecondi
+            let startTime = Date.now();
+            
+            function updateProgressBar() {
+                if (!timer || !isTimerStarted)
+                    return;
+                
+                let elapsed = Date.now() - startTime;
+                let progress = Math.min((elapsed / duration) * 100, 100);
+                document.getElementById('progressBar').style.width = progress + '%';
+                
+                if (elapsed < duration) {
+                    requestAnimationFrame(updateProgressBar);
+                } else {
+                    isTimerStarted = false;
+                    numCorrect = Number(document.getElementById('numCorrect').innerText);
+                    let record = Number(document.getElementById('record').innerText);
+                    
+                    if (numCorrect > record) {
+                        record = numCorrect;
+                        saveRecordStats(record);
+                        playVictoryJingle();
+                        renderPopup('alert', 'complimenti! hai fatto un nuovo record: ' + record);
+                    } else {
+                        playNegativeSound();
+                        renderPopup('alert', 'tempo scaduto! riprova...');
+                    }
+                    displayStats(null);
+                    resetProgressBar();
+                }
+            }
+            
+            resetProgressBar();
+            isTimerStarted = true;
+            updateProgressBar();
+            generateQuestion();
+        }
+        
+        function resetProgressBar() {
+            isTimerStarted = false;
+            disableAnswerField(true);
+            document.getElementById('progressBar').style.width = '0%';
+            visibilityToggle('timerButton', true);
+            visibilityToggle('progressBarContainer', true);
+        }
+        
+        function checkAnswer(event) {
+            if ((!isCustomKeyboard && event.key === 'Enter') || (isCustomKeyboard && event.currentTarget.id === 'enterKey')) {
+                const userAnswerReadOnly = document.getElementById('answer').readonly;
+                if (event.key === 'Enter' && userAnswerReadOnly === true) {
+                    return;
+                }
+                const userAnswer = document.getElementById('answer').value;
+                if (userAnswer === '') {
+                    return;
+                }
+                
+                isCheckingAnswer = true;
+                
+                // Imposta l'input come readonly dopo una risposta
+                disableAnswerField(true);
+                
+                const correctAnswer = Number(document.getElementById('answer').dataset.result);
+                const answerInput = document.getElementById('answer');
+                
+                let questionTimeoutMillis = 1000;
+                if (Number(userAnswer) === correctAnswer) {
+                    const positiveMessage = POSITIVE_RESPONSES[Math.floor(Math.random() * POSITIVE_RESPONSES.length)];
+                    document.getElementById('result').innerText = positiveMessage;
+                    document.getElementById('result').className = 'color-good';
+                    
+                    answerInput.className = 'background-good';
+                    
+                    let assigned = assignReward(document.getElementById('answer').dataset.normalizedTag);
+                    if (assigned) {
+                        playVictoryJingle();
+                        let gameContainer = document.getElementById('gameContainer');
+                        gameContainer.classList.add('esplosione');
+                        setTimeout(() => {
+                            gameContainer.classList.remove('esplosione');
+                        }, 1000);
+                    } else {
+                        playPositiveSound();
+                    }
+                } else {
+                    const negativeMessage = NEGATIVE_RESPONSES[Math.floor(Math.random() * NEGATIVE_RESPONSES.length)];
+                    document.getElementById('result').innerText = negativeMessage;
+                    document.getElementById('result').className = 'color-bad';
+                    
+                    answerInput.className = 'background-bad';
+                    answerInput.classList.add('shake');  // Aggiungi l'animazione di tremolio
+                    
+                    playNegativeSound();
+                    
+                    // Rimuovi la classe dopo il tremolio (0.5s per l'animazione)
+                    setTimeout(() => {
+                        document.getElementById('result').innerText = '…correggiamo…';
+                        answerInput.value = correctAnswer;  // Sovrascrivi con la risposta corretta
+                        // Colora il campo di verde dopo la correzione
+                        answerInput.style.transition = 'background-color 1s ease, border-color 1s ease';
+                        answerInput.className = 'background-good';
+                    }, 500);
+                    
+                    questionTimeoutMillis += 500;
+                }
+                
+                // aggiorna le statistiche
+                displayStats(Number(userAnswer) === correctAnswer);
+                
+                // genera una nuova domanda
+                // aggiungo un ritardo per dare il tempo di leggere l'esito
+                // ed eventualmente correggere il risultato
+                setTimeout(() => {
+                    generateQuestion();
+                    isCheckingAnswer = false;
+                }, questionTimeoutMillis);
+            }
+        }
+        
+        function getUsersKey() {
+            return 'users';
+        }
+        
+        function getUserConfigKey() {
+            // Chiave unica per ogni utente
+            const key = currentUser + '_config';
+            return key;
+        }
+        
+        function getUserStatsKey() {
+            // Chiave unica per ogni utente/operazione/difficoltà
+            const key = currentUser + '_' + operation + '_' + difficulty + (timer? '_timer': '') + '_stats';
+            return key;
+        }
+        
+        function getUserRewardsKey() {
+            // Chiave unica per ogni utente/operazione
+            const key = currentUser + '_' + operation + '_rewards';
+            return key;
+        }
+        
+        function saveRecordStats(record) {
+            // Se è una sfida a tempo le statistiche sono temporanee e resettate ogni volta
+            // l'unico valore da salvare è il record
+            let stats = { correct: 0, incorrect: 0, timerRecord: record };
+            const key = getUserStatsKey();
+            localStorage.setItem(key, JSON.stringify(stats));
+            document.getElementById('record').innerText = stats.timerRecord;
+        }
+        
+        function displayStats(isCorrect) {
+            const key = getUserStatsKey();
+            
+            let stats = JSON.parse(localStorage.getItem(key)) || { correct: 0, incorrect: 0, timerRecord: 0 };
+            // Se è una sfida a tempo le statistiche sono temporanee e resettate ogni volta
+            // l'unico valore da salvare è il record
+            if (isCorrect === null && key.indexOf('_timer_') !== -1) {
+                stats.correct = 0;
+                stats.incorrect = 0;
+                localStorage.setItem(key, JSON.stringify(stats));
+            }
+            if (isCorrect !== null) {
+                if (isCorrect) {
+                    stats.correct += 1;
+                } else {
+                    stats.incorrect += 1;
+                }
+            }
+            
+            // Calcolare il totale delle risposte e la percentuale di corrette
+            const total = stats.correct + stats.incorrect;
+            const correctPercentage = total > 0 ? Math.round((stats.correct / total) * 100) : 0;
+
+            document.getElementById('numCorrect').innerText = stats.correct;
+            document.getElementById('numIncorrect').innerText = stats.incorrect;
+            document.getElementById('correctPercentage').innerText = correctPercentage + '%';
+            if (key.indexOf('_timer_') !== -1) {
+                document.getElementById('record').innerText = stats.timerRecord;
+            } else {
+                document.getElementById('record').innerText = '';
+            }
+            
+            if (correctPercentage >= 75)
+                document.getElementById('correctPercentage').className = 'color-good';
+            else if (correctPercentage >= 50)
+                document.getElementById('correctPercentage').className = 'color-normal';
+            else
+                document.getElementById('correctPercentage').className = 'color-bad';
+            
+            if (isCorrect !== null)
+                localStorage.setItem(key, JSON.stringify(stats));
+        }
+        
+        function resetStats() {
+            const key = getUserStatsKey();
+            localStorage.removeItem(key);
+            displayStats(null);
+        }
+        
+        function startGame() {
+            visibilityToggle('usersContainer', true);
+            visibilityToggle('configContainer', true);
+            visibilityToggle('gameContainer', true);
+            checkConfig();
+            visibilityToggle('rewardsContainer', true);
+        }
+        
+        function renderUsers() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+            users.sort().forEach((user, index) => {
+                const userButton = document.createElement('button');
+                userButton.className = 'user-button';
+                userButton.textContent = user;
+                userButton.onclick = () => selectUser(user);
+                
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete-button';
+                deleteButton.innerHTML = '❌';
+                deleteButton.onclick = (event) => {
+                    event.stopPropagation();
+                    deleteUser(user);
+                };
+                
+                userButton.appendChild(deleteButton);
+                userList.appendChild(userButton);
+            });
+        }
+        
+        function addUser() {
+            const newUser = renderPopup('prompt', 'inserisci il nome del nuovo utente: ');
+            if (newUser && newUser.length && !users.includes(newUser)) {
+                users.push(newUser);
+                localStorage.setItem(getUsersKey(), JSON.stringify(users));
+                renderUsers();
+            }
+        }
+        
+        function deleteUser(user) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(user))
+                    localStorage.removeItem(key);
+            }
+            
+            const index = users.indexOf(user);
+            users.splice(index, 1);
+            localStorage.setItem(getUsersKey(), JSON.stringify(users));
+            renderUsers();
+        }
+        
+        function selectUser(userName) {
+            currentUser = userName;  // Memorizza il nome utente selezionato
+            loadConfig(); // carica le configurazioni dell'utente
+            startGame();  // Inizia il gioco quando viene selezionato un utente
+        }
+        
+        function loadConfig() {
+            // carica la configurazione dell'utente o in caso di assenza la configurazione di default
+            let config = JSON.parse(localStorage.getItem(getUserConfigKey())) || { operation: 'addition', difficulty: 'easy', theme: 'girl', activateTimer: false,  activateStats: true, activateSounds: false, activateKeyboard: true};
+            
+            document.getElementById('operation').value = config.operation;
+            document.getElementById('difficulty').value = config.difficulty;
+            document.getElementById('theme').value = config.theme;
+            renderTheme();
+            
+            if (config.activateTimer === true) {
+                document.getElementById('activateTimer').click();
+            }
+            if (config.activateStats === true) {
+                document.getElementById('activateStats').click();
+            }
+            if (config.activateSounds === true) {
+                document.getElementById('activateSounds').click();
+            }
+            if (config.activateKeyboard === true && deviceType == 'mobile') {
+                document.getElementById('activateKeyboard').click();
+            }
+        }
+        
+        function saveConfig() {
+            // carica la configurazione dell'utente o in caso di assenza la configurazione di default
+            let config = JSON.parse(localStorage.getItem(getUserConfigKey())) || { operation: 'addition', difficulty: 'easy', theme: 'girl', activateTimer: false,  activateStats: true, activateSounds: false, activateKeyboard: true};
+            
+            config.operation = document.getElementById('operation').value;
+            config.difficulty = document.getElementById('difficulty').value;
+            config.theme = document.getElementById('theme').value;
+            
+            config.activateTimer = document.getElementById('activateTimer').checked;
+            config.activateStats = document.getElementById('activateStats').checked;
+            config.activateSounds = document.getElementById('activateSounds').checked;
+            if (deviceType == 'mobile') {
+                config.activateKeyboard = document.getElementById('activateKeyboard').checked;
+            }
+            
+            localStorage.setItem(getUserConfigKey(), JSON.stringify(config));
+        }
+        
+        function renderPopup(type, message) {
+            // per realizzare successivamente un popup
+            if (type == 'prompt') {
+                let p = prompt(message);
+                if (p != null)
+                    p = p.trim();
+                return p;
+            } else if (type == 'alert') {
+                return alert(message);
+            }
+        }
+        
+        function checkMobileConfig() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            
+            // Verifica se il dispositivo è mobile (smartphone o tablet)
+            deviceType = 'desktop';
+            if (/mobile|android|iphone|ipad|ipod|windows phone/i.test(userAgent)) {
+                deviceType = 'mobile';
+                document.getElementById('answer').setAttribute('inputmode', 'numeric');
+                visibilityToggle('keyboardOptionContainer', true);
+            }
+        }
+        
+        function disableAnswerField(disable) {
+            document.getElementById('answer').readonly = (disable || isCustomKeyboard);
+            document.getElementById('answer').disabled = (disable || isCustomKeyboard);
+        }
+        
+        function playPositiveSound() {
+            if (!document.getElementById('activateSounds').checked)
+                return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            oscillator.type = 'sine'; // 'square', 'triangle', 'sawtooth' per effetti diversi
+            oscillator.frequency.setValueAtTime(880, ctx.currentTime); // 880 Hz = un "ding"
+            gainNode.gain.setValueAtTime(0.2, ctx.currentTime); // volume
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            oscillator.start();
+            oscillator.stop(ctx.currentTime + 0.2); // suono breve
+        }
+        
+        function playNegativeSound() {
+            if (!document.getElementById('activateSounds').checked)
+                return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = ctx.createOscillator();
+            const gainNode = ctx.createGain();
+            oscillator.type = 'square';
+            oscillator.frequency.setValueAtTime(200, ctx.currentTime); // più cupo
+            gainNode.gain.setValueAtTime(0.2, ctx.currentTime);
+            oscillator.connect(gainNode);
+            gainNode.connect(ctx.destination);
+            oscillator.start();
+            oscillator.stop(ctx.currentTime + 0.2);
+        }
+        
+        function playVictoryJingle() {
+            if (!document.getElementById('activateSounds').checked)
+                return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const notes = [523, 659, 784]; // Do-Mi-Sol
+            notes.forEach((freq, i) => {
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.frequency.value = freq;
+                oscillator.type = 'square';
+                gainNode.gain.setValueAtTime(0.2, ctx.currentTime + i * 0.15);
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.start(ctx.currentTime + i * 0.15);
+                oscillator.stop(ctx.currentTime + i * 0.15 + 0.15);
+            });
+        }
+        
+        /*
+        function playVictorySound() {
+            if (!document.getElementById('activateSounds').checked)
+                return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const TA = 440;   // nota LA
+            const TAAA = 660; // nota MI
+            const times = [0, 0.4];  // distanza temporale tra le due note
+            times.forEach((delay, i) => {
+                const oscillator = ctx.createOscillator();
+                const gainNode = ctx.createGain();
+                oscillator.type = 'triangle';
+                oscillator.frequency.setValueAtTime(i === 0 ? TA : TAAA, ctx.currentTime + delay);
+                gainNode.gain.setValueAtTime(0.2, ctx.currentTime + delay);
+                oscillator.connect(gainNode);
+                gainNode.connect(ctx.destination);
+                oscillator.start(ctx.currentTime + delay);
+                oscillator.stop(ctx.currentTime + delay + 0.3);
+            });
+        }
+        
+        function playGrandVictorySound() {
+            if (!document.getElementById('activateSounds').checked)
+                return;
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc1 = ctx.createOscillator();
+            const gain1 = ctx.createGain();
+            osc1.type = 'triangle';
+            osc1.frequency.setValueAtTime(440, ctx.currentTime);
+            gain1.gain.setValueAtTime(0.2, ctx.currentTime);
+            osc1.connect(gain1);
+            gain1.connect(ctx.destination);
+            osc1.start(ctx.currentTime);
+            osc1.stop(ctx.currentTime + 0.4); // TA
+            const osc2 = ctx.createOscillator();
+            const gain2 = ctx.createGain();
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(660, ctx.currentTime + 0.5);
+            gain2.gain.setValueAtTime(0.3, ctx.currentTime + 0.5);
+            osc2.connect(gain2);
+            gain2.connect(ctx.destination);
+            osc2.start(ctx.currentTime + 0.5);
+            osc2.stop(ctx.currentTime + 1.2); // TAAA (più lungo)
+        }
+        */
+        
+        function assignReward(tag) {
+            const key = getUserRewardsKey();
+            let earned = JSON.parse(localStorage.getItem(key) || '{}');
+            
+            if (!earned[tag]) {
+                earned[tag] = true;
+                localStorage.setItem(key, JSON.stringify(earned));
+                visibilityToggle('reward-' + tag, false);
+                let elem = document.getElementById('container-' + tag);
+                if (elem != null) {
+                    elem.classList.toggle('zoomable');
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function displayRewards() {
+            const container = document.getElementById("allRewards");
+            container.innerHTML = ''; // Pulisce per sicurezza
+            
+            for (let i = 1; i <= 10; i++) {
+                for (let j = 1; j <= 10; j++) {
+                    let operator = null;
+                    let fullOperation = null;
+                    let tag = null;
+                    let title = null;
+                    let rewardsList = null;
+                    if (operation == 'addition') {
+                        operator = '+';
+                        title = [i, operator, j].join(' ');
+                        tag = title.replaceAll(' ','')
+                        fullOperation = [i, operator, j, '=', (i+j)].join(' ');
+                        rewardsList = additionRewardsList;
+                    } else if (operation == 'multiplication') {
+                        operator = 'x';
+                        title = [i, operator, j].join(' ');
+                        tag = title.replaceAll(' ','')
+                        fullOperation = [i, operator, j, '=', (i*j)].join(' ');
+                        rewardsList = multiplicationRewardsList;
+                    } else if (operation == 'subtraction') {
+                        operator = '-';
+                        title = [(i+j-1), operator, i].join(' ');
+                        tag = title.replaceAll(' ','')
+                        fullOperation = [(i+j-1), operator, i, '=', (j-1)].join(' ');
+                        rewardsList = subtractionRewardsList;
+                    } else if (operation == 'division') {
+                        operator = ':';
+                        title = [(i*j), operator, i].join(' ');
+                        tag = title.replaceAll(' ','')
+                        fullOperation = [(i*j), operator, i, '=', j].join(' ');
+                        rewardsList = divisionRewardsList;
+                    }
+                    
+                    const rewardIndex = (((i-1) * 10 + j)-1) % rewardsList.length;
+                    const reward = rewardsList[rewardIndex];
+                    const isEarned = JSON.parse(localStorage.getItem(getUserRewardsKey()) || '{}')[tag];
+                    
+                    const wrapper = document.createElement('span');
+                    wrapper.title = title;
+                    wrapper.id = 'container-' + tag;
+                    wrapper.className = 'reward';
+                    if (isEarned)
+                        wrapper.classList.toggle('zoomable');
+                    
+                    const tagLabel = document.createElement('span');
+                    tagLabel.textContent = fullOperation;
+                    tagLabel.className = 'rewardLabel';
+                    wrapper.appendChild(tagLabel);
+                    
+                    const iconElem = document.createElement('span');
+                    iconElem.id = 'reward-' + tag;
+                    iconElem.style.visibility = isEarned ? 'visible' : 'hidden';
+                    iconElem.textContent = reward.icon;
+                    wrapper.appendChild(iconElem);
+                    
+                    const nameLabel = document.createElement('span');
+                    nameLabel.textContent = reward.name;
+                    nameLabel.className = 'rewardLabel';
+                    wrapper.appendChild(nameLabel);
+        
+                    const categoryLabel = document.createElement('span');
+                    categoryLabel.textContent = '('+reward.category+')';
+                    categoryLabel.className = 'rewardLabel';
+                    wrapper.appendChild(categoryLabel);
+                    
+                    wrapper.addEventListener('click', function() {
+                        if (wrapper.classList.contains('zoomable'))
+                            wrapper.classList.toggle('zoomed');
+                    });
+                    container.appendChild(wrapper);
+                    
+                }
+            }
+        }
+
+        // gestisci la visibilità dei componenti
+        visibilityToggle('configContainer', true);
+        visibilityToggle('allConfigs', true);
+        visibilityToggle('keyboardOptionContainer', true);
+        visibilityToggle('gameContainer', true);
+        visibilityToggle('timerContainer', true);
+        visibilityToggle('progressBarContainer', true);
+        visibilityToggle('customKeyboard', true);
+        visibilityToggle('recordContainer', false);
+        visibilityToggle('stats', true);
+        visibilityToggle('rewardsContainer', true);
+        // imposta i componenti in base al tipo di device
+        checkMobileConfig();
+        
+        // aggiungi i listener
+        document.getElementById('addUserButton').addEventListener('click', addUser);
+        document.getElementById('configToggle').addEventListener('click', function() {
+            visibilityToggle('allConfigs', true);
+        });
+        document.getElementById('operation').addEventListener('change', checkConfig);
+        document.getElementById('difficulty').addEventListener('change', checkConfig);
+        document.getElementById('theme').addEventListener('change', renderTheme);
+        document.getElementById('activateTimer').addEventListener('change', checkConfig);
+        document.getElementById('activateStats').addEventListener('change', function() {
+            visibilityToggle('stats', true);
+            saveConfig();
+        });
+        document.getElementById('activateSounds').addEventListener('change', saveConfig);
+        document.getElementById('activateKeyboard').addEventListener('change', function() {
+            isCustomKeyboard = !isCustomKeyboard;
+            disableAnswerField(isCustomKeyboard);
+            visibilityToggle('customKeyboard', true);
+            saveConfig();
+        });
+        document.getElementById('resetStatsButton').addEventListener('click', resetStats);
+        document.getElementById('answer').addEventListener('keydown', checkAnswer);
+        document.getElementById('timerButton').addEventListener('click', startTimer);
+        document.getElementById('rewardsToggle').addEventListener('click', function() {
+            visibilityToggle('allRewards', true);
+        });
+        
+        // gestisci gli eventi della tastiera
+        const inputField = document.getElementById('answer');
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key => {
+            key.addEventListener('click', (event) => {
+                if (isCheckingAnswer)
+                    return;
+                if (key.id === 'enterKey') {
+                    // invia i dati
+                    checkAnswer(event);
+                } else if (key.id === 'deleteKey') {
+                    // cancella ultimo carattere
+                    inputField.value = inputField.value.slice(0, -1);
+                } else {
+                    // inserisci un nuovo numero
+                    inputField.value += key.textContent;
+                }
+            });
+        });
+        
+        // visualizza i profili utenti
+        renderUsers();
+        
+
+
+// https://unicode.org/emoji/charts/full-emoji-list.html
+// premi speciali: 🏆🏅🥇🥈🥉👑💎💯
+// altre: ⛔🚫♻🆘⏰🌡🕶
+
+const additionRewardsList = [
+{"icon": "😀", "category": "smile", "name": "faccia sorridente"},
+{"icon": "😁", "category": "smile", "name": "faccia raggiante"},
+{"icon": "😅", "category": "smile", "name": "faccia sorridente con sudore"},
+{"icon": "🤣", "category": "smile", "name": "faccia che si rotola sul pavimento dalle risate"},
+{"icon": "😂", "category": "smile", "name": "faccia con lacrime di gioia"},
+{"icon": "🙂", "category": "smile", "name": "faccia leggermente sorridente"},
+{"icon": "🙃", "category": "smile", "name": "faccia a testa in giù"},
+{"icon": "🫠", "category": "smile", "name": "faccia che si scioglie"},
+{"icon": "😉", "category": "smile", "name": "faccia con occhiolino"},
+{"icon": "😊", "category": "smile", "name": "faccia con occhi sorridenti"},
+{"icon": "😇", "category": "smile", "name": "faccia con aureola"},
+{"icon": "🥰", "category": "smile", "name": "faccia sorridente con cuoricini"},
+{"icon": "😍", "category": "smile", "name": "faccia sorridente con occhi a cuoricino"},
+{"icon": "🤩", "category": "smile", "name": "faccia sorridente colpita dalle stelle"},
+{"icon": "😘", "category": "smile", "name": "faccia sorridente che manda un bacio"},
+{"icon": "😗", "category": "smile", "name": "faccia sorridente che bacia"},
+{"icon": "😚", "category": "smile", "name": "faccia sorridente che bacia ad occhi chiusi"},
+{"icon": "🥲", "category": "smile", "name": "faccia con una lacrima"},
+{"icon": "😋", "category": "smile", "name": "faccia che assapora il cibo"},
+{"icon": "😛", "category": "smile", "name": "faccia che caccia la lingua"},
+{"icon": "😜", "category": "smile", "name": "faccia con occhiolino che caccia la lingua"},
+{"icon": "🤪", "category": "smile", "name": "faccia buffa"},
+{"icon": "🤗", "category": "smile", "name": "faccia sorridente con le braccia aperte"},
+{"icon": "🫢", "category": "smile", "name": "faccia con la mano sulla bocca"},
+{"icon": "🫣", "category": "smile", "name": "faccia che sbircia"},
+{"icon": "🤫", "category": "smile", "name": "faccia che fa silenzio"},
+{"icon": "🤔", "category": "smile", "name": "faccia pensierosa"},
+{"icon": "🫡", "category": "smile", "name": "faccia che saluta"},
+{"icon": "🤐", "category": "smile", "name": "faccia con la bocca sigillata"},
+{"icon": "🤨", "category": "smile", "name": "faccia che alza il sopracciglio"},
+{"icon": "😐", "category": "smile", "name": "faccia neutra"},
+{"icon": "😑", "category": "smile", "name": "faccia senza espressioni"},
+{"icon": "😶", "category": "smile", "name": "faccia senza bocca"},
+{"icon": "🫥", "category": "smile", "name": "faccia tratteggiata"},
+{"icon": "😶‍🌫️", "category": "smile", "name": "faccia tra le nuvole"},
+{"icon": "😒", "category": "smile", "name": "faccia non divertita"},
+{"icon": "🙄", "category": "smile", "name": "faccia con occhi all'insù"},
+{"icon": "😬", "category": "smile", "name": "faccia che fa una smorfia"},
+{"icon": "😮‍💨", "category": "smile", "name": "faccia che sbuffa"},
+{"icon": "🤥", "category": "smile", "name": "faccia che mente"},
+{"icon": "🫨", "category": "smile", "name": "faccia tremante"},
+{"icon": "😪", "category": "smile", "name": "faccia assonnata"},
+{"icon": "🤤", "category": "smile", "name": "faccia che sbava"},
+{"icon": "😴", "category": "smile", "name": "faccia addormentata"},
+{"icon": "🤒", "category": "smile", "name": "faccia con la febbre"},
+{"icon": "🤕", "category": "smile", "name": "faccia con benda sulla testa"},
+{"icon": "🤢", "category": "smile", "name": "faccia nauseata"},
+{"icon": "🤧", "category": "smile", "name": "faccia che starnutisce"},
+{"icon": "🥵", "category": "smile", "name": "faccia calda"},
+{"icon": "🥶", "category": "smile", "name": "faccia fredda"},
+{"icon": "🥴", "category": "smile", "name": "faccia stordita"},
+{"icon": "😵", "category": "smile", "name": "faccia con gli occhi a croce"},
+{"icon": "😵‍💫", "category": "smile", "name": "faccia con gli occhi a spirale"},
+{"icon": "🤯", "category": "smile", "name": "faccia che esplode"},
+{"icon": "🤠", "category": "smile", "name": "faccia cowboy"},
+{"icon": "🥳", "category": "smile", "name": "faccia che festeggia"},
+{"icon": "🥸", "category": "smile", "name": "faccia mascherata"},
+{"icon": "😎", "category": "smile", "name": "faccia con occhiali da sole"},
+{"icon": "🤓", "category": "smile", "name": "faccia con occhiali"},
+{"icon": "🧐", "category": "smile", "name": "faccia con monocolo"},
+{"icon": "😕", "category": "smile", "name": "faccia confusa"},
+{"icon": "😟", "category": "smile", "name": "faccia preoccupata"},
+{"icon": "☹", "category": "smile", "name": "faccia accigliata"},
+{"icon": "😮", "category": "smile", "name": "faccia a bocca aperta"},
+{"icon": "😲", "category": "smile", "name": "faccia stupita"},
+{"icon": "😳", "category": "smile", "name": "faccia arrossata"},
+{"icon": "🥺", "category": "smile", "name": "faccia supplicante"},
+{"icon": "🥹", "category": "smile", "name": "faccia che trattiene le lacrime"},
+{"icon": "😨", "category": "smile", "name": "faccia spaventata"},
+{"icon": "😰", "category": "smile", "name": "faccia ansiosa con sudore"},
+{"icon": "😢", "category": "smile", "name": "faccia che piange"},
+{"icon": "😭", "category": "smile", "name": "faccia che piange rumorosamente"},
+{"icon": "😱", "category": "smile", "name": "faccia che urla di paura"},
+{"icon": "😫", "category": "smile", "name": "faccia stanca"},
+{"icon": "🥱", "category": "smile", "name": "faccia che sbadiglia"},
+{"icon": "😡", "category": "smile", "name": "faccia infuriata"},
+{"icon": "😠", "category": "smile", "name": "faccia arrabbiata"},
+{"icon": "🤬", "category": "smile", "name": "faccia infuriata che dice parolacce"},
+{"icon": "😈", "category": "smile", "name": "faccia sorridente con le corna"},
+{"icon": "👿", "category": "smile", "name": "faccia arrabbiata con le corna"},
+{"icon": "👶", "category": "persone", "name": "neonato"},
+{"icon": "👦", "category": "persone", "name": "ragazzo"},
+{"icon": "👧", "category": "persone", "name": "ragazza"},
+{"icon": "👨", "category": "persone", "name": "uomo"},
+{"icon": "👩", "category": "persone", "name": "donna"},
+{"icon": "👨‍🦳", "category": "persone", "name": "nonno"},
+{"icon": "👩‍🦳", "category": "persone", "name": "nonna"},
+{"icon": "🧚‍♀️", "category": "persone", "name": "fatina"},
+{"icon": "🧝", "category": "persone", "name": "elfo"},
+{"icon": "🧌", "category": "persone", "name": "troll"},
+{"icon": "🧜‍♀️", "category": "persone", "name": "sirena"},
+{"icon": "🤴", "category": "persone", "name": "principe"},
+{"icon": "👸", "category": "persone", "name": "principessa"},
+{"icon": "🥷", "category": "persone", "name": "ninja"},
+{"icon": "🧞‍♂️", "category": "persone", "name": "genio della lampada"},
+{"icon": "🧟‍♂️", "category": "persone", "name": "zombie"},
+{"icon": "🦸‍♂️", "category": "persone", "name": "supereroe"},
+{"icon": "🎅", "category": "persone", "name": "Babbo Natale"},
+{"icon": "🧙‍♂️", "category": "persone", "name": "Mago Merlino"},
+{"icon": "🧛‍♂️", "category": "persone", "name": "Conte Dracula"}
+];
+
+const multiplicationRewardsList = [
+{"icon": "🐶", "category": "mammiferi", "name": "cane"},
+{"icon": "🐵", "category": "mammiferi", "name": "scimmia"},
+{"icon": "🐺", "category": "mammiferi", "name": "lupo"},
+{"icon": "🦊", "category": "mammiferi", "name": "volpe"},
+{"icon": "🦝", "category": "mammiferi", "name": "procione"},
+{"icon": "🐱", "category": "mammiferi", "name": "gatto"},
+{"icon": "🦁", "category": "mammiferi", "name": "leone"},
+{"icon": "🐯", "category": "mammiferi", "name": "tigre"},
+{"icon": "🐴", "category": "mammiferi", "name": "cavallo"},
+{"icon": "🫎", "category": "mammiferi", "name": "alce"},
+{"icon": "🦄", "category": "mammiferi", "name": "unicorno"},
+{"icon": "🐷", "category": "mammiferi", "name": "maiale"},
+{"icon": "🐗", "category": "mammiferi", "name": "cinghiale"},
+{"icon": "🐭", "category": "mammiferi", "name": "topo"},
+{"icon": "🐹", "category": "mammiferi", "name": "criceto"},
+{"icon": "🐰", "category": "mammiferi", "name": "coniglio"},
+{"icon": "🐨", "category": "mammiferi", "name": "koala"},
+{"icon": "🐻", "category": "mammiferi", "name": "orso"},
+{"icon": "🐻‍❄️", "category": "mammiferi", "name": "orso polare"},
+{"icon": "🐼", "category": "mammiferi", "name": "panda"},
+{"icon": "🦍", "category": "mammiferi", "name": "gorilla"},
+{"icon": "🦌", "category": "mammiferi", "name": "cervo"},
+{"icon": "🫏", "category": "mammiferi", "name": "asino"},
+{"icon": "🦓", "category": "mammiferi", "name": "zebra"},
+{"icon": "🦬", "category": "mammiferi", "name": "bisonte"},
+{"icon": "🐂", "category": "mammiferi", "name": "bue"},
+{"icon": "🐃", "category": "mammiferi", "name": "bufalo"},
+{"icon": "🐄", "category": "mammiferi", "name": "mucca"},
+{"icon": "🐏", "category": "mammiferi", "name": "ariete"},
+{"icon": "🐑", "category": "mammiferi", "name": "pecora"},
+{"icon": "🐐", "category": "mammiferi", "name": "capra"},
+{"icon": "🐪", "category": "mammiferi", "name": "dromedario"},
+{"icon": "🐫", "category": "mammiferi", "name": "cammello"},
+{"icon": "🦙", "category": "mammiferi", "name": "lama"},
+{"icon": "🦒", "category": "mammiferi", "name": "giraffa"},
+{"icon": "🐘", "category": "mammiferi", "name": "elefante"},
+{"icon": "🦣", "category": "mammiferi", "name": "mammoth"},
+{"icon": "🦏", "category": "mammiferi", "name": "rinoceronte"},
+{"icon": "🦛", "category": "mammiferi", "name": "ippopotamo"},
+{"icon": "🐿", "category": "mammiferi", "name": "scoiattolo"},
+{"icon": "🦫", "category": "mammiferi", "name": "castoro"},
+{"icon": "🦔", "category": "mammiferi", "name": "riccio"},
+{"icon": "🦇", "category": "mammiferi", "name": "pipistrello"},
+{"icon": "🦥", "category": "mammiferi", "name": "bradipo"},
+{"icon": "🦦", "category": "mammiferi", "name": "lontra"},
+{"icon": "🦨", "category": "mammiferi", "name": "puzzola"},
+{"icon": "🦘", "category": "mammiferi", "name": "canguro"},
+{"icon": "🦡", "category": "mammiferi", "name": "tasso"},
+{"icon": "🦃", "category": "uccelli", "name": "tacchino"},
+{"icon": "🐓", "category": "uccelli", "name": "gallina"},
+{"icon": "🐤", "category": "uccelli", "name": "pulcino"},
+{"icon": "🐧", "category": "uccelli", "name": "pinguino"},
+{"icon": "🕊", "category": "uccelli", "name": "colomba"},
+{"icon": "🦅", "category": "uccelli", "name": "aquila"},
+{"icon": "🦆", "category": "uccelli", "name": "anatra"},
+{"icon": "🦢", "category": "uccelli", "name": "cigno"},
+{"icon": "🪿", "category": "uccelli", "name": "oca"},
+{"icon": "🦉", "category": "uccelli", "name": "gufo"},
+{"icon": "🦤", "category": "uccelli", "name": "dodo"},
+{"icon": "🦩", "category": "uccelli", "name": "fenicottero"},
+{"icon": "🦚", "category": "uccelli", "name": "pavone"},
+{"icon": "🦜", "category": "uccelli", "name": "pappagallo"},
+{"icon": "🐦‍⬛", "category": "uccelli", "name": "merlo"},
+{"icon": "🐦‍🔥", "category": "uccelli", "name": "fenice"},
+{"icon": "🐸", "category": "rettili", "name": "rana"},
+{"icon": "🐊", "category": "rettili", "name": "coccodrillo"},
+{"icon": "🐢", "category": "rettili", "name": "tartaruga"},
+{"icon": "🦎", "category": "rettili", "name": "lucertola"},
+{"icon": "🐍", "category": "rettili", "name": "serpente"},
+{"icon": "🦕", "category": "rettili", "name": "sauropode"},
+{"icon": "🦖", "category": "rettili", "name": "tirannosauro"},
+{"icon": "🐉", "category": "rettili", "name": "drago"},
+{"icon": "🐋", "category": "animali marini", "name": "balena"},
+{"icon": "🐬", "category": "animali marini", "name": "delfino"},
+{"icon": "🦈", "category": "animali marini", "name": "squalo"},
+{"icon": "🦭", "category": "animali marini", "name": "foca"},
+{"icon": "🐠", "category": "animali marini", "name": "pesce tropicale"},
+{"icon": "🐡", "category": "animali marini", "name": "pesce palla"},
+{"icon": "🐙", "category": "animali marini", "name": "polpo"},
+{"icon": "🦑", "category": "animali marini", "name": "calamaro"},
+{"icon": "🪼", "category": "animali marini", "name": "medusa"},
+{"icon": "🦀", "category": "animali marini", "name": "granchio"},
+{"icon": "🦞", "category": "animali marini", "name": "aragosta"},
+{"icon": "🦐", "category": "animali marini", "name": "gamberetto"},
+{"icon": "🐚", "category": "animali marini", "name": "conchiglia"},
+{"icon": "🦪", "category": "animali marini", "name": "ostrica"},
+{"icon": "🪸", "category": "animali marini", "name": "corallo"},
+{"icon": "🐌", "category": "insetti", "name": "lumaca"},
+{"icon": "🦋", "category": "insetti", "name": "farfalla"},
+{"icon": "🐛", "category": "insetti", "name": "bruco"},
+{"icon": "🐜", "category": "insetti", "name": "formica"},
+{"icon": "🐝", "category": "insetti", "name": "ape"},
+{"icon": "🐞", "category": "insetti", "name": "coccinella"},
+{"icon": "🦗", "category": "insetti", "name": "grillo"},
+{"icon": "🪳", "category": "insetti", "name": "scarafaggio"},
+{"icon": "🕷", "category": "insetti", "name": "ragno"},
+{"icon": "🦂", "category": "insetti", "name": "scorpione"},
+{"icon": "🦟", "category": "insetti", "name": "zanzara"},
+{"icon": "🪰", "category": "insetti", "name": "mosca"},
+{"icon": "🪱", "category": "insetti", "name": "verme"}
+];
+
+const subtractionRewardsList = [
+{"icon": "👋", "category": "gesti con le mani", "name": "ciao"},
+{"icon": "👌", "category": "gesti con le mani", "name": "OK"},
+{"icon": "✌", "category": "gesti con le mani", "name": "vittoria"},
+{"icon": "🤞", "category": "gesti con le mani", "name": "dita incrociate"},
+{"icon": "👍", "category": "gesti con le mani", "name": "pollice in alto"},
+{"icon": "👎", "category": "gesti con le mani", "name": "pollice in basso"},
+{"icon": "👏", "category": "gesti con le mani", "name": "applauso"},
+{"icon": "🙌", "category": "gesti con le mani", "name": "mani in alto"},
+{"icon": "🫶", "category": "gesti con le mani", "name": "mani a cuore"},
+{"icon": "🤝", "category": "gesti con le mani", "name": "stretta di mano"},
+{"icon": "❤", "category": "cuori", "name": "cuore rosso"},
+{"icon": "🩷", "category": "cuori", "name": "cuore rosa"},
+{"icon": "🧡", "category": "cuori", "name": "cuore arancione"},
+{"icon": "💛", "category": "cuori", "name": "cuore giallo"},
+{"icon": "💚", "category": "cuori", "name": "cuore verde"},
+{"icon": "💙", "category": "cuori", "name": "cuore blu"},
+{"icon": "🩵", "category": "cuori", "name": "cuore azzurro"},
+{"icon": "💜", "category": "cuori", "name": "cuore viola"},
+{"icon": "🖤", "category": "cuori", "name": "cuore nero"},
+{"icon": "🤍", "category": "cuori", "name": "cuore bianco"},
+{"icon": "💌", "category": "cuori", "name": "lettera d'amore"},
+{"icon": "💘", "category": "cuori", "name": "cuore con freccia"},
+{"icon": "💝", "category": "cuori", "name": "cuore con nastro"},
+{"icon": "💖", "category": "cuori", "name": "cuore scintillante"},
+{"icon": "💗", "category": "cuori", "name": "cuore che cresce"},
+{"icon": "💓", "category": "cuori", "name": "cuore che batte"},
+{"icon": "💞", "category": "cuori", "name": "cuori rotanti"},
+{"icon": "💔", "category": "cuori", "name": "cuore spezzato"},
+{"icon": "❤️‍🔥", "category": "cuori", "name": "cuore in fiamme"},
+{"icon": "❤️‍🩹", "category": "cuori", "name": "cuore che guarisce"},
+{"icon": "🏃", "category": "sport", "name": "corsa"},
+{"icon": "🧗", "category": "sport", "name": "arrampicata"},
+{"icon": "🤺", "category": "sport", "name": "scherma"},
+{"icon": "🏇", "category": "sport", "name": "equitazione"},
+{"icon": "⛷", "category": "sport", "name": "sci"},
+{"icon": "🏂", "category": "sport", "name": "snowboard"},
+{"icon": "🏌", "category": "sport", "name": "golf"},
+{"icon": "🏄", "category": "sport", "name": "surf"},
+{"icon": "🚣", "category": "sport", "name": "canottaggio"},
+{"icon": "🏊", "category": "sport", "name": "nuoto"},
+{"icon": "🏋", "category": "sport", "name": "sollevamento pesi"},
+{"icon": "🚴", "category": "sport", "name": "ciclismo"},
+{"icon": "🤸", "category": "sport", "name": "ginnastica ritmica"},
+{"icon": "🤼", "category": "sport", "name": "lotta"},
+{"icon": "🤽", "category": "sport", "name": "pallanuoto"},
+{"icon": "🤾", "category": "sport", "name": "pallamano"},
+{"icon": "⚽", "category": "sport", "name": "calcio"},
+{"icon": "⚾", "category": "sport", "name": "baseball"},
+{"icon": "🏀", "category": "sport", "name": "basket"},
+{"icon": "🏐", "category": "sport", "name": "pallavolo"},
+{"icon": "🏈", "category": "sport", "name": "football americano"},
+{"icon": "🏉", "category": "sport", "name": "rugby"},
+{"icon": "🎾", "category": "sport", "name": "tennis"},
+{"icon": "🎳", "category": "sport", "name": "bowling"},
+{"icon": "🏏", "category": "sport", "name": "cricket"},
+{"icon": "🏒", "category": "sport", "name": "hockey"},
+{"icon": "🏓", "category": "sport", "name": "ping pong"},
+{"icon": "🥊", "category": "sport", "name": "boxe"},
+{"icon": "🥋", "category": "sport", "name": "karate"},
+{"icon": "⛸", "category": "sport", "name": "pattinaggio su ghiaccio"},
+{"icon": "🌹", "category": "piante", "name": "rosa"},
+{"icon": "🌻", "category": "piante", "name": "girasole"},
+{"icon": "🌼", "category": "piante", "name": "margherita"},
+{"icon": "🌷", "category": "piante", "name": "tulipano"},
+{"icon": "🌺", "category": "piante", "name": "ibiscus"},
+{"icon": "🌳", "category": "piante", "name": "albero"},
+{"icon": "🌴", "category": "piante", "name": "palma"},
+{"icon": "🌵", "category": "piante", "name": "cactus"},
+{"icon": "☘", "category": "piante", "name": "trifoglio"},
+{"icon": "🍀", "category": "piante", "name": "quadrifoglio"},
+{"icon": "🍇", "category": "frutta e verdura", "name": "uva"},
+{"icon": "🍈", "category": "frutta e verdura", "name": "melone"},
+{"icon": "🍉", "category": "frutta e verdura", "name": "cocomero"},
+{"icon": "🍊", "category": "frutta e verdura", "name": "arancia"},
+{"icon": "🍌", "category": "frutta e verdura", "name": "banana"},
+{"icon": "🍍", "category": "frutta e verdura", "name": "ananas"},
+{"icon": "🍎", "category": "frutta e verdura", "name": "mela"},
+{"icon": "🍐", "category": "frutta e verdura", "name": "pera"},
+{"icon": "🍑", "category": "frutta e verdura", "name": "pesca"},
+{"icon": "🍒", "category": "frutta e verdura", "name": "ciliegie"},
+{"icon": "🍓", "category": "frutta e verdura", "name": "fragola"},
+{"icon": "🥝", "category": "frutta e verdura", "name": "kiwi"},
+{"icon": "🥥", "category": "frutta e verdura", "name": "cocco"},
+{"icon": "🥑", "category": "frutta e verdura", "name": "avocado"},
+{"icon": "🌰", "category": "frutta e verdura", "name": "castagna"},
+{"icon": "🥜", "category": "frutta e verdura", "name": "arachidi"},
+{"icon": "🍅", "category": "frutta e verdura", "name": "pomodoro"},
+{"icon": "🍆", "category": "frutta e verdura", "name": "melanzana"},
+{"icon": "🥔", "category": "frutta e verdura", "name": "patata"},
+{"icon": "🥕", "category": "frutta e verdura", "name": "carota"},
+{"icon": "🌶", "category": "frutta e verdura", "name": "peperoncino"},
+{"icon": "🫑", "category": "frutta e verdura", "name": "peperone"},
+{"icon": "🥒", "category": "frutta e verdura", "name": "cetriolo"},
+{"icon": "🥬", "category": "frutta e verdura", "name": "insalata"},
+{"icon": "🥦", "category": "frutta e verdura", "name": "broccoli"},
+{"icon": "🧄", "category": "frutta e verdura", "name": "aglio"},
+{"icon": "🧅", "category": "frutta e verdura", "name": "cipolla"},
+{"icon": "🫘", "category": "frutta e verdura", "name": "fagioli"},
+{"icon": "🫛", "category": "frutta e verdura", "name": "piselli"},
+{"icon": "🍄", "category": "frutta e verdura", "name": "fungo"}
+];
+
+const divisionRewardsList = [
+{"icon": "🥐", "category": "cibi", "name": "cornetto"},
+{"icon": "🍩", "category": "cibi", "name": "ciambella"},
+{"icon": "🥞", "category": "cibi", "name": "pancake"},
+{"icon": "🍗", "category": "cibi", "name": "pollo allo spiedo"},
+{"icon": "🍔", "category": "cibi", "name": "panino"},
+{"icon": "🍟", "category": "cibi", "name": "patatine fritte"},
+{"icon": "🍕", "category": "cibi", "name": "pizza"},
+{"icon": "🌭", "category": "cibi", "name": "hot dog"},
+{"icon": "🥪", "category": "cibi", "name": "sandwich"},
+{"icon": "🍿", "category": "cibi", "name": "popcorn"},
+{"icon": "🍝", "category": "cibi", "name": "spaghetti"},
+{"icon": "🍣", "category": "cibi", "name": "sushi"},
+{"icon": "🍦", "category": "cibi", "name": "gelato"},
+{"icon": "🍪", "category": "cibi", "name": "biscotto"},
+{"icon": "🍰", "category": "cibi", "name": "torta"},
+{"icon": "🍫", "category": "cibi", "name": "cioccolata"},
+{"icon": "🍬", "category": "cibi", "name": "caramella"},
+{"icon": "🍭", "category": "cibi", "name": "leccalecca"},
+{"icon": "🥛", "category": "cibi", "name": "latte"},
+{"icon": "🧃", "category": "cibi", "name": "succo di frutta"},
+{"icon": "🌙", "category": "cielo", "name": "luna"},
+{"icon": "☀", "category": "cielo", "name": "sole"},
+{"icon": "🪐", "category": "cielo", "name": "pianeta"},
+{"icon": "⭐", "category": "cielo", "name": "stella"},
+{"icon": "☁", "category": "cielo", "name": "nuvola"},
+{"icon": "🌧", "category": "cielo", "name": "pioggia"},
+{"icon": "⛈", "category": "cielo", "name": "temporale"},
+{"icon": "🌨", "category": "cielo", "name": "neve"},
+{"icon": "🌪", "category": "cielo", "name": "tornado"},
+{"icon": "🌈", "category": "cielo", "name": "arcobaleno"},
+{"icon": "🚂", "category": "mezzi di trasporto", "name": "treno"},
+{"icon": "🚌", "category": "mezzi di trasporto", "name": "pullman"},
+{"icon": "🚕", "category": "mezzi di trasporto", "name": "taxi"},
+{"icon": "🚗", "category": "mezzi di trasporto", "name": "automobile"},
+{"icon": "🚜", "category": "mezzi di trasporto", "name": "trattore"},
+{"icon": "🏎", "category": "mezzi di trasporto", "name": "auto da corsa"},
+{"icon": "🏍", "category": "mezzi di trasporto", "name": "moto"},
+{"icon": "🛵", "category": "mezzi di trasporto", "name": "scooter"},
+{"icon": "🚲", "category": "mezzi di trasporto", "name": "bicicletta"},
+{"icon": "🛴", "category": "mezzi di trasporto", "name": "monopattino"},
+{"icon": "🛹", "category": "mezzi di trasporto", "name": "skateboard"},
+{"icon": "🛼", "category": "mezzi di trasporto", "name": "pattini"},
+{"icon": "⛵", "category": "mezzi di trasporto", "name": "barca a vela"},
+{"icon": "🛶", "category": "mezzi di trasporto", "name": "canoa"},
+{"icon": "🚤", "category": "mezzi di trasporto", "name": "motoscafo"},
+{"icon": "🚢", "category": "mezzi di trasporto", "name": "nave"},
+{"icon": "✈", "category": "mezzi di trasporto", "name": "aereo"},
+{"icon": "🚁", "category": "mezzi di trasporto", "name": "elicottero"},
+{"icon": "🚀", "category": "mezzi di trasporto", "name": "missile"},
+{"icon": "🛸", "category": "mezzi di trasporto", "name": "navicella spaziale"},
+{"icon": "🧩", "category": "giochi", "name": "puzzle"},
+{"icon": "🎲", "category": "giochi", "name": "giochi da tavolo"},
+{"icon": "♟", "category": "giochi", "name": "scacchi"},
+{"icon": "🃏",  "category": "giochi", "name": "giocare a carte"},
+{"icon": "📺", "category": "giochi", "name": "cartoni animati"},
+{"icon": "🎮", "category": "giochi", "name": "videogiochi"},
+{"icon": "🤖", "category": "giochi", "name": "robot"},
+{"icon": "🚘", "category": "giochi", "name": "macchinine"},
+{"icon": "🪀", "category": "giochi", "name": "yoyo"},
+{"icon": "🪄", "category": "giochi", "name": "giochi di magia"},
+{"icon": "🛝", "category": "giochi", "name": "parco giochi"},
+{"icon": "🪁", "category": "giochi", "name": "aquilone"},
+{"icon": "🎈", "category": "giochi", "name": "palloncini"},
+{"icon": "🧸", "category": "giochi", "name": "peluche"},
+{"icon": "📖", "category": "giochi", "name": "leggere"},
+{"icon": "🎨", "category": "giochi", "name": "colorare"},
+{"icon": "🩰", "category": "giochi", "name": "ballare"},
+{"icon": "🎤", "category": "giochi", "name": "cantare"},
+{"icon": "🎸", "category": "giochi", "name": "suonare"},
+{"icon": "🎧", "category": "giochi", "name": "ascoltare musica"},
+{"icon": "🚽", "category": "emoticon", "name": "gabinetto"},
+{"icon": "🧻", "category": "emoticon", "name": "carta igienica"},
+{"icon": "💩", "category": "emoticon", "name": "cacca"},
+{"icon": "🤡", "category": "emoticon", "name": "pagliaccio"},
+{"icon": "👻", "category": "emoticon", "name": "fantasma"},
+{"icon": "👽", "category": "emoticon", "name": "alieno"},
+{"icon": "🙈", "category": "emoticon", "name": "scimmia che non vede"},
+{"icon": "🙉", "category": "emoticon", "name": "scimmia che non sente"},
+{"icon": "🙊", "category": "emoticon", "name": "scimmia che non parla"},
+{"icon": "👣", "category": "emoticon", "name": "impronte di persona"},
+{"icon": "🐾", "category": "emoticon", "name": "impronte di animale"},
+{"icon": "💋", "category": "emoticon", "name": "bacio"},
+{"icon": "🎁", "category": "emoticon", "name": "regalo"},
+{"icon": "🎯", "category": "emoticon", "name": "bersaglio"},
+{"icon": "❄", "category": "emoticon", "name": "ghiaccio"},
+{"icon": "💧", "category": "emoticon", "name": "acqua"},
+{"icon": "🔥", "category": "emoticon", "name": "fuoco"},
+{"icon": "💥", "category": "emoticon", "name": "esplosione"},
+{"icon": "🚨", "category": "emoticon", "name": "sirena"},
+{"icon": "⚠", "category": "emoticon", "name": "pericolo"},
+{"icon": "🎄", "category": "eventi", "name": "Natale"},
+{"icon": "🎃", "category": "eventi", "name": "Halloween"},
+{"icon": "🎂", "category": "eventi", "name": "compleanno"},
+{"icon": "🎭", "category": "eventi", "name": "carnevale"},
+{"icon": "⛄", "category": "eventi", "name": "vacanze sulla neve"},
+{"icon": "🏖", "category": "eventi", "name": "vacanze al mare"},
+{"icon": "🏕", "category": "eventi", "name": "vacenze in campeggio"},
+{"icon": "🎡", "category": "eventi", "name": "giostre"},
+{"icon": "🎪", "category": "eventi", "name": "circo"},
+{"icon": "🪅", "category": "eventi", "name": "festa"}
+];
+
+    </script>
+</body>
+</html>
