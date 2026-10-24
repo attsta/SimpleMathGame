@@ -6,7 +6,7 @@ L'idea nasce dal bisogno di rendere l'allenamento quotidiano piu leggero: il bam
 
 I premi hanno un ruolo importante: invogliano i bambini a continuare a esercitarsi, a riprovare dopo gli errori e a migliorarsi un po' alla volta. Ogni ricompensa sbloccata diventa un piccolo obiettivo raggiunto, trasformando la pratica delle operazioni in una sfida positiva.
 
-L'app funziona come pagina statica: basta aprire `SimpleMathGame.html` nel browser, anche da cellulare. Non richiede installazione, build o server locale.
+L'app funziona come pagina statica: basta aprire `index.html` nel browser, anche da cellulare. Non richiede installazione, build o server locale.
 
 ## Cosa permette di fare
 
@@ -18,7 +18,7 @@ Sono disponibili anche temi colore, suoni opzionali e una tastiera numerica pers
 
 ## Come si usa
 
-1. Apri `SimpleMathGame.html` con un browser.
+1. Apri `index.html` con un browser.
 2. Crea un nuovo utente oppure selezionane uno gia presente.
 3. Scegli operazione, difficolta e tema.
 4. Attiva o disattiva le opzioni disponibili:
