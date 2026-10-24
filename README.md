@@ -87,7 +87,7 @@ I dati restano disponibili nello stesso browser finche non vengono cancellati ma
 
 ## File del progetto
 
-- `SimpleMathGame.html`: contiene struttura HTML, stili CSS, logica JavaScript e liste dei premi.
+- `index.html`: contiene struttura HTML, stili CSS, logica JavaScript e liste dei premi.
 - `README.md`: descrizione e istruzioni del progetto.
 
 ## Future evoluzioni
@@ -102,7 +102,7 @@ La modalità `sfida tra amici` potrebbe permettere a due o più bambini di gioca
 
 ## Note tecniche
 
-Il progetto e realizzato senza dipendenze esterne. Tutta l'applicazione si trova nel file `SimpleMathGame.html` e usa:
+Il progetto e realizzato senza dipendenze esterne. Tutta l'applicazione si trova nel file `index.html` e usa:
 
 - HTML per la struttura;
 - CSS per temi, layout e animazioni;
